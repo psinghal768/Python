@@ -1,0 +1,27 @@
+import pyrebase
+import RPi.GPIO as GPIO
+import time
+
+config = {
+    "apiKey": "AAAAJVnU4eg:APA91bGES3_fp_JTFEpMlLx3aDahcKeMvyEvfTQnsMVbr2xbj4LPJNqLeOzYtCr8KRSy5gB9B0unP5BYy1vjicTaERLhpSmFSwx6uDV4qrs-tM2ExCIDL7-qaYYcrsT0UPbVuI-bVgrQ",
+    "authDomain": "node-mcu-b24f6.firebaseapp.com",
+    "databaseURL": "https://node-mcu-b24f6.firebaseio.com/",
+    "storageBucket": "node-mcu-b24f6.appspot.com"
+    }
+
+firebase = pyrebase.initialize_app(config)
+
+GPIO.setmode(GPIO.BOARD)
+mypin = 8
+GPIO.setup(mypin, GPIO.OUT, initial = 0)
+
+db = firebase.database()
+while(True):
+    users = db.child("envision1").get()
+    print(users.val())
+    print(type(users.val()))
+    c=users.val()
+    if(c==1):
+        GPIO.output(mypin,GPIO.LOW)
+    else:
+        GPIO.output(mypin,GPIO.HIGH)
